@@ -1,7 +1,3 @@
-<p>productos-principal works!</p>
-
-<H1> COMPONENTE PRODUCTOS</H1>
-
 <!-- 
 <h2> COMPONENTE PRODUCTOS </h2>
 <div class="recuadro_principal  container">
@@ -17,6 +13,7 @@
         </table>
     </label>
   </div>
+
 -->
 
 
@@ -26,9 +23,13 @@
   <div class = "recuadro_principal container">
     <form [formGroup] = "agregarProducto" (submit) = "enviarProducto()">
        <h1> Agregar Producto A la Bases de Datos</h1>    
+       <span class="badge bg-warning text-dark" *ngIf="agregarProducto.invalid"> Todos los campos son obligatorios </span>
         <p>Numero de producto: <input type="number" placeholder="numero del producto" formControlName="numeroProducto" /></p>
         <p>Nombre: <input type="text" placeholder="nombre del producto" formControlName = "nombre" /></p>
         <p>Precio: <input type="number" placeholder="precio del producto" formControlName = "precio" /></p>
         <p><input type="submit" value="Enviar Producto" [disabled] = "!agregarProducto.value"/></p>            
     </form>
 </div>
+
+
+

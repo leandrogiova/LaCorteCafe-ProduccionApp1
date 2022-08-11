@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 import { Producto } from '../models/producto';
+import { ProductoService } from '../services/producto-service';
+
 
 @Component({
   selector: 'app-productos-principal',
@@ -10,37 +13,62 @@ import { Producto } from '../models/producto';
   styleUrls: ['./productos-principal.component.css']
 })
 export class ProductosPrincipalComponent implements OnInit {
-
+  
   agregarProducto: FormGroup;
+  verListaProductos: boolean;
+  productos: Producto[];
 
-  constructor(private fb: FormBuilder, private firebase: AngularFirestore) {
+
+  constructor(private fb: FormBuilder, private productoService: ProductoService) {
     this.agregarProducto = this.fb.group({
-      numeroProducto: '',
-      nombre: '',
-      precio: '',
+      numeroProducto: ['', [Validators.required, ]],//el numero de producto no se puede repetir
+      nombre: ['', Validators.required],
+      precio: ['', Validators.required],
     });
 
-   }
+    this.verListaProductos = false;
+    this.productos = [];
+  }
 
   ngOnInit(): void {
-
+    this.productoService.obtenerTodosLosProductos().subscribe(data => {
+      console.log("metodo verListaProducto:\n", data);
+    });
   }
 
 
-
+  /*
+  */
   enviarProducto(){
-    console.log("formulario producto:", this.agregarProducto);
+
     let producto1: Producto;
     producto1 = this.agregarProducto.value;
-
-
-
-    this.firebase.collection('productos').add(producto1).then( () => {
-    }).catch(err => {
-      console.log("Ha ocurrido un problema\n", err);
-    })
+    console.log("producto1:", producto1);
+    this.productoService.enviarProductoFirebase(producto1);
+  
 
   }
+
+
+  /*
+  */
+  VerListaProducto(){
+    this.productoService.obtenerTodosLosProductos().subscribe(data => {
+      console.log("metodo verListaProducto:\n");
+      const datos = data.payload.doc.id;
+      console.log(datos);
+      /*
+      data.forEach((element:any) => {
+        console.log(element.payload.doc.data() );        
+      });
+*/
+
+    });
+
+  }
+
+
+
 
 
 }

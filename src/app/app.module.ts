@@ -10,6 +10,9 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire/compat';
 import { MesasPrincipalComponent } from './mesas-principal/mesas-principal.component';
 import { ProductosPrincipalComponent } from './productos-principal/productos-principal.component';
+import { ProductoService } from './services/producto-service';
+
+
 
 @NgModule({
   declarations: [
@@ -24,7 +27,7 @@ import { ProductosPrincipalComponent } from './productos-principal/productos-pri
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [ProductoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
