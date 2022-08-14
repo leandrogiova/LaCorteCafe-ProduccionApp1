@@ -2,6 +2,9 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+//https://firebase.google.com/docs/database/web/read-and-write?hl=es-419
+
+
 export const environment = {
   firebase: {
     projectId: 'bar-lacorte',

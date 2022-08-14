@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 
 import { Producto } from '../models/producto';
 import { ProductoService } from '../services/producto-service';
@@ -28,44 +26,61 @@ export class ProductosPrincipalComponent implements OnInit {
 
     this.verListaProductos = false;
     this.productos = [];
+
   }
 
   ngOnInit(): void {
-    this.productoService.obtenerTodosLosProductos().subscribe(data => {
-      console.log("metodo verListaProducto:\n", data);
+    this.productoService.obtenerTodosLosProductos().subscribe( doc => {
+      doc.forEach( (element: any) => {
+        this.productos.push({
+          id: element.payload.doc.id,
+          ...element.payload.doc.data()
+        });
+      });
     });
   }
 
 
   /*
+    * enviarProducto envia un producto a la base de datos Firebase
+    * Inicializa una variable producto1 a traves del formulario 'agregarProducto'
+    * No recibe parametros. 
+    * No tiene ningun tipo de retorno.
   */
   enviarProducto(){
-
     let producto1: Producto;
     producto1 = this.agregarProducto.value;
     console.log("producto1:", producto1);
     this.productoService.enviarProductoFirebase(producto1);
-  
-
   }
-
 
   /*
+    * verLosProductos trae todos los productos de la base de datos
+    * Al inicio inicializa el array de productos 'productos' para que no halla una copia de los datos.
+    * Tambien pone en true la variable 'verListaProductos' para que se visualize en el html la lista
+    * Luego llama al servicio 'productoService' para obtener todos los productos de la base de datos.
+    * Inserta cada uno de los objetos que trae en el array 'productos'
+    * No toma argumentos
+    * No tiene ningun tipo de retorno.
   */
-  VerListaProducto(){
-    this.productoService.obtenerTodosLosProductos().subscribe(data => {
-      console.log("metodo verListaProducto:\n");
-      const datos = data.payload.doc.id;
-      console.log(datos);
-      /*
-      data.forEach((element:any) => {
-        console.log(element.payload.doc.data() );        
+   verLosProductos(){
+    this.verListaProductos = true;
+    this.productos = [];
+
+    this.productoService.obtenerTodosLosProductos().subscribe( doc => {
+      doc.forEach( (element: any) => {
+        this.productos.push({
+          id: element.payload.doc.id,
+          ...element.payload.doc.data()
+        });
       });
-*/
-
     });
+    
+   }
 
-  }
+
+
+
 
 
 

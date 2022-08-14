@@ -1,20 +1,20 @@
-<!-- 
 <h2> COMPONENTE PRODUCTOS </h2>
-<div class="recuadro_principal  container">
+<div class="  ">
     <h1> Ver Lista de Productos</h1>
-    <p> <button (click) = "VerListaProducto()">Ver lista de productos </button> </p>
-    <label *ngIf = "verListaProductos">
-        <table>
-            <tr  *ngFor="let producto of productos">
-                <th class="tabla_productos">{{producto.numeroProducto}}</th>
-                <th class="tabla_productos">{{producto.nombre}} </th>      
-                <th class="tabla_productos">${{producto.precio}}</th>
+    <p> <button (click) = "verLosProductos()">Ver lista de productos </button> </p>
+     <label *ngIf = "verListaProductos">
+
+
+        <table class="table table-dark">
+            <tr  class="table-active" *ngFor="let producto of productos">
+                <th class="tabla_productos" scope="row">{{producto.numeroProducto}}</th>
+                <th class="tabla_productos" scope="row">{{producto.nombre}} </th>      
+                <th class="tabla_productos" scope="row">${{producto.precio}}</th>
             </tr>       
         </table>
+
     </label>
   </div>
-
--->
 
 
 
@@ -30,6 +30,45 @@
         <p><input type="submit" value="Enviar Producto" [disabled] = "!agregarProducto.value"/></p>            
     </form>
 </div>
+
+
+
+
+
+<div> 
+    <h1> PRUEBAS DE VISTAS </h1>
+
+    <p> <button (click) = "verLosProductos()">Ver lista de productos </button> </p>
+    <label *ngIf = "verListaProductos">
+
+
+       <table class="table table-dark">
+           <thead>
+           <tr>
+               <td> Numero de Producto </td>
+               <td> Nombre </td> 
+               <td> Precio</td>
+           </tr>
+           </thead>
+           <tbody>
+               
+             <tr class="table-active" *ngFor="let producto of productos">
+                
+            
+          
+               <th scope="row"> {{producto.numeroProducto}} </th>
+               <td colspan="2" class="table-active">  {{producto.nombre}} </td>
+                <td> $ {{producto.precio}} </td>
+                </tr>
+           </tbody>
+         </table>
+
+    </label>
+</div>
+
+
+
+
 
 
 
