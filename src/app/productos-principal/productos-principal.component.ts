@@ -30,14 +30,6 @@ export class ProductosPrincipalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.productoService.obtenerTodosLosProductos().subscribe( doc => {
-      doc.forEach( (element: any) => {
-        this.productos.push({
-          id: element.payload.doc.id,
-          ...element.payload.doc.data()
-        });
-      });
-    });
   }
 
 
@@ -50,9 +42,8 @@ export class ProductosPrincipalComponent implements OnInit {
   enviarProducto(){
     let producto1: Producto;
     producto1 = this.agregarProducto.value;
-    console.log("producto1:", producto1);
     this.productoService.enviarProductoFirebase(producto1);
-  }
+    }
 
   /*
     * verLosProductos trae todos los productos de la base de datos
@@ -64,9 +55,8 @@ export class ProductosPrincipalComponent implements OnInit {
     * No tiene ningun tipo de retorno.
   */
    verLosProductos(){
-    this.verListaProductos = true;
+    this.verListaProductos = !this.verListaProductos;
     this.productos = [];
-
     this.productoService.obtenerTodosLosProductos().subscribe( doc => {
       doc.forEach( (element: any) => {
         this.productos.push({
@@ -75,7 +65,6 @@ export class ProductosPrincipalComponent implements OnInit {
         });
       });
     });
-    
    }
 
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { mesaProductos } from '../models/mesaProducto';
 import { Producto } from '../models/producto';
+import { ProductoService } from '../services/producto-service';
 
 @Component({
   selector: 'app-mesas-principal',
@@ -32,7 +33,7 @@ export class MesasPrincipalComponent implements OnInit {
   verListaProductos: boolean;
   verUnaMesaBool: boolean;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private productoService: ProductoService) {
     this.agregarProducto = this.fb.group({
       numeroProducto: '',
       nombre: '',
@@ -63,6 +64,14 @@ export class MesasPrincipalComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.productoService.obtenerTodosLosProductos().subscribe( doc => {
+      doc.forEach( (element: any) => {
+        this.productos.push({
+          id: element.payload.doc.id,
+          ...element.payload.doc.data()
+        });
+      });
+    });
   }
 
 

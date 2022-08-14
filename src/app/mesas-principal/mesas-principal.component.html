@@ -20,27 +20,27 @@
         <h4> Productos: </h4>
         <select [formControl] = "numeroDeProducto" class = "small container-fluid" >
             <option *ngFor = "let producto of productos" value={{producto.numeroProducto}}> 
-                {{producto.numeroProducto}} | {{producto.nombre}} | ${{producto.precio}}
+                    {{producto.numeroProducto}} | {{producto.nombre}} | ${{producto.precio}}
             </option>
         </select>
-    <input type = "button" value = "Agregar Producto" (click) = "listaProductos = AgregarProductoaLaListaDeProductos(listaProductos)">
+    <input type = "button" class="btn btn-secondary" value = "Agregar Producto" [disabled]="!numeroDeProducto.valid" (click) = "listaProductos = AgregarProductoaLaListaDeProductos(listaProductos)">
     <div class="recuadro_secundario">
         <h6> Lista de Productos:</h6>
-        <label *ngFor=" let producto of listaProductos">
+        <ul *ngFor=" let producto of listaProductos">
             <ul>
                 <li>
                     <p>
-                        <button value="{{producto.id}}" (click)="listaProductos = eliminarProductoListaProducto(listaProductos, $event)"> Eliminar </button>
-                        Numero de producto: {{producto.numeroProducto}} | {{producto.nombre}} | ${{producto.precio}}     
+                            <button class="btn btn-secondary" value="{{producto.id}}" (click)="listaProductos = eliminarProductoListaProducto(listaProductos, $event)"> Eliminar </button>
+                            Numero de producto: {{producto.numeroProducto}} | Nombre : {{producto.nombre}} | Precio: ${{producto.precio}}
                     </p>
                 </li>
             </ul>
-        </label>
+        </ul>
     </div>
     <p>
         <input type="text" class = "casilleroDetalle" placeholder="Detalle de la mesa" [formControl] = "detalleMesa">
     </p>
-    <p> <input type = "button" value = "Enviar" (click) = "enviarAlServidorNuevaMesa()"> </p>
+    <p> <input type = "button" class="btn btn-secondary" value = "Enviar" (click) = "enviarAlServidorNuevaMesa()"> </p>
 </div>
 
 
