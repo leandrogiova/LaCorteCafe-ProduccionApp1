@@ -43,7 +43,14 @@ export class ProductosPrincipalComponent implements OnInit {
     let producto1: Producto;
     producto1 = this.agregarProducto.value;
     this.productoService.enviarProductoFirebase(producto1);
-    }
+    this.agregarProducto = this.fb.group({
+      numeroProducto: ['', [Validators.required, ]],//el numero de producto no se puede repetir
+      nombre: ['', Validators.required],
+      precio: ['', Validators.required],
+    });
+  }
+
+
 
   /*
     * verLosProductos trae todos los productos de la base de datos

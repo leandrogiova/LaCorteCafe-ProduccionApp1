@@ -31,6 +31,6 @@
         <p>Numero de producto: <input type="number" placeholder="numero del producto" formControlName="numeroProducto" /></p>
         <p>Nombre: <input type="text" placeholder="nombre del producto" formControlName = "nombre" /></p>
         <p>Precio: <input type="number" placeholder="precio del producto" formControlName = "precio" /></p>
-        <p><input type="submit" value="Enviar Producto" [disabled] = "!agregarProducto.value"/></p>            
+        <p><input type="submit" value="Enviar Producto" [disabled] = "agregarProducto.invalid"/></p>            
     </form>
 </div>

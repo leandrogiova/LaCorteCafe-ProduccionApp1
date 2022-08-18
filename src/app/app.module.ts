@@ -11,6 +11,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { MesasPrincipalComponent } from './mesas-principal/mesas-principal.component';
 import { ProductosPrincipalComponent } from './productos-principal/productos-principal.component';
 import { ProductoService } from './services/producto-service';
+import { MesasService } from './services/mesas.service';
 
 
 
@@ -27,7 +28,7 @@ import { ProductoService } from './services/producto-service';
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [ProductoService],
+  providers: [ProductoService, MesasService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

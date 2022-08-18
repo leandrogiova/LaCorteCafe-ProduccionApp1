@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { doc } from 'firebase/firestore';
 import { mesaProductos } from '../models/mesaProducto';
 import { Producto } from '../models/producto';
+import { MesasService } from '../services/mesas.service';
 import { ProductoService } from '../services/producto-service';
 
 @Component({
@@ -33,7 +35,7 @@ export class MesasPrincipalComponent implements OnInit {
   verListaProductos: boolean;
   verUnaMesaBool: boolean;
 
-  constructor(private fb: FormBuilder, private productoService: ProductoService) {
+  constructor(private fb: FormBuilder, private productoService: ProductoService, private mesasService: MesasService) {
     this.agregarProducto = this.fb.group({
       numeroProducto: '',
       nombre: '',
@@ -43,13 +45,13 @@ export class MesasPrincipalComponent implements OnInit {
     this.mesas = new Array;
     this.mesasResumenes = new Array;
     this.productos = new Array;
-    this.numeroMesa = new FormControl('');
-    this.detalleMesa = new FormControl('');
+    this.numeroMesa = new FormControl([Validators.required ]);
+    this.detalleMesa = new FormControl();
     
-    this.numeroDeProducto = new FormControl('');
+    this.numeroDeProducto = new FormControl('', [Validators.required]);
     this.abrirNuevaMesa = new mesaProductos();
-    this.fecha1Mesa = new FormControl('');
-    this.fecha2Mesa = new FormControl('');
+    this.fecha1Mesa = new FormControl([ Validators.required ]);
+    this.fecha2Mesa = new FormControl([Validators.required ]);
 
     this.verLista = false;
     this.verOcultar = "Ver";
@@ -64,6 +66,7 @@ export class MesasPrincipalComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.productos = [];
     this.productoService.obtenerTodosLosProductos().subscribe( doc => {
       doc.forEach( (element: any) => {
         this.productos.push({
@@ -72,6 +75,18 @@ export class MesasPrincipalComponent implements OnInit {
         });
       });
     });
+
+    this.mesas = [];
+    this.mesasService.getMesas().subscribe( (doc) => {
+      doc.forEach( (element: any) => {
+        this.mesas.push({
+          id: element.payload.doc.id,
+          ...element.payload.doc.data()
+        })
+      });
+    });
+    console.log("this.mesas:", this.mesas);
+
   }
 
 
@@ -127,12 +142,14 @@ export class MesasPrincipalComponent implements OnInit {
       this.mesaUnica.precioTotal = this.mesaUnica.precioTotal + this.mesaUnica.listaProductos[e].precio;
     }
 
-    this.mesas.push(this.mesaUnica);
+//    this.mesas.push(this.mesaUnica);
+    console.log("enviando => mesaUnica", this.mesaUnica);
+    this.mesasService.enviarMesaFirebase(this.mesaUnica);
     //this.servicioMesaProductos.postAbrirMesa(this.mesaUnica);
 
-    this.numeroMesa = new FormControl('');
-    this.numeroDeProducto = new FormControl('');
-    this.fecha1Mesa = new FormControl('');
+    this.numeroMesa = new FormControl([Validators.required ]);
+    this.numeroDeProducto = new FormControl('', [Validators.required]);
+    this.fecha1Mesa = new FormControl([ Validators.required ]);
     this.listaProductos = [];
     this.mesaUnica = new mesaProductos();
     this.detalleMesa = new FormControl('');
@@ -153,6 +170,7 @@ export class MesasPrincipalComponent implements OnInit {
         break;
       }
     }
+    this.numeroDeProducto = new FormControl('', [Validators.required]);
     return listaProductos_;
   }
 
@@ -168,7 +186,7 @@ export class MesasPrincipalComponent implements OnInit {
   eliminarProductoListaProducto(listaProductos_: Producto[], _$event: any): Producto[] {
     for(let e =0; e <= listaProductos_.length; e++){
       if(_$event.target.value == listaProductos_[e].id){
-        listaProductos_.splice(0,1);
+        listaProductos_.splice(e,1);
         break;
       }
     }
@@ -303,6 +321,35 @@ export class MesasPrincipalComponent implements OnInit {
       }
     }
   }
+
+
+  todasLasMesas(){
+    this.mesas = [];
+    this.mesasService.getMesas().subscribe( (doc) => {
+      doc.forEach( (element: any) => {
+        this.mesas.push({
+          id: element.payload.doc.id,
+          ...element.payload.doc.data()
+        })
+      });
+    });
+  }
+
+
+  /*
+     verLosProductos(){
+    this.verListaProductos = !this.verListaProductos;
+    this.productos = [];
+    this.productoService.obtenerTodosLosProductos().subscribe( doc => {
+      doc.forEach( (element: any) => {
+        this.productos.push({
+          id: element.payload.doc.id,
+          ...element.payload.doc.data()
+        });
+      });
+    });
+   }
+  */
 
 
 }
